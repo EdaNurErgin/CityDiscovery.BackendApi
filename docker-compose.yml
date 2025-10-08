@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports: ["5672:5672","15672:15672"]
+    restart: unless-stopped
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Eda12345!
+      - MSSQL_PID=Developer
+    ports: ["1433:1433"]
+    volumes:
+      - mssql-data:/var/opt/mssql
+    restart: unless-stopped
+
+  identity:
+    build: ./IdentityService
+    container_name: identity-service
+    ports: ["5001:80"]
+    depends_on: [ rabbitmq, mssql ]
+
+  venue:
+    build: ./VenueService
+    container_name: venue-service
+    ports: ["5002:80"]
+    depends_on: [ rabbitmq, mssql ]
+
+  social:
+    build: ./SocialService
+    container_name: social-service
+    ports: ["5003:80"]
+    depends_on: [ rabbitmq, mssql ]
+
+  review:
+    build: ./ReviewService
+    container_name: review-service
+    ports: ["5004:80"]
+    depends_on: [ rabbitmq, mssql ]
+
+  admin:
+    build: ./AdminService
+    container_name: admin-service
+    ports: ["5005:80"]
+    depends_on: [ rabbitmq, mssql ]
+
+  gateway:
+    build: ./Gateway
+    container_name: gateway
+    ports: ["5000:80"]
+    depends_on: [ identity, venue, social, review, admin ]
+
+volumes:
+  mssql-data:
