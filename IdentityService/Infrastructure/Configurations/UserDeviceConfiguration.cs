@@ -21,6 +21,7 @@ namespace IdentityService.Infrastructure.Data.Configurations
 
             // 🔒 Kullanıcı + cihaz kombinasyonu benzersiz olacak
             builder.HasIndex(x => new { x.UserId, x.DeviceId }).IsUnique();
+
         }
     }
 }

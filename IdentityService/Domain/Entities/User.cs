@@ -15,7 +15,7 @@ namespace IdentityService.Domain.Entities
         public string? AvatarUrl { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string? Bio { get; set; }
-
+        public string? City { get; set; }
 
         public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
         public ICollection<UserDevice> UserDevices { get; set; } = new List<UserDevice>();
