@@ -42,6 +42,31 @@ public class UserService : IUserService
     public async Task<bool> ExistsAsync(Guid id)
         => (await _users.GetByIdAsync(id)) is not null;
 
+    // 🆕 YENİ METODLAR - Diğer servisler için
+    public async Task<List<UserDto>> GetBulkByIdsAsync(List<Guid> userIds)
+    {
+        var users = await _users.GetBulkByIdsAsync(userIds);
+        return users.Where(u => u.IsActive).Select(ToDto).ToList();
+    }
+
+    public async Task<string> GetUserRoleAsync(Guid id)
+    {
+        var user = await _users.GetByIdAsync(id);
+        return user?.IsActive == true ? user.Role.ToString() : "Inactive";
+    }
+
+    public async Task<List<UserDto>> GetActiveUsersAsync()
+    {
+        var users = await _users.GetActiveUsersAsync();
+        return users.Select(ToDto).ToList();
+    }
+
+    public async Task<List<UserDto>> GetUsersByCityAsync(string city)
+    {
+        var users = await _users.GetUsersByCityAsync(city);
+        return users.Where(u => u.IsActive).Select(ToDto).ToList();
+    }
+
     private static UserDto ToDto(User u) => new()
     {
         Id = u.Id,

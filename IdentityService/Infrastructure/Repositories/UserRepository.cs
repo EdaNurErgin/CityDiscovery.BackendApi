@@ -25,5 +25,24 @@ namespace IdentityService.Infrastructure.Repositories
         public Task<List<User>> GetAllAsync()
             => _db.Users.AsNoTracking().ToListAsync();
 
+        // 🆕 YENİ METODLAR - Diğer servisler için
+        public async Task<List<User>> GetBulkByIdsAsync(List<Guid> userIds)
+            => await _db.Users
+                .Where(u => userIds.Contains(u.Id))
+                .AsNoTracking()
+                .ToListAsync();
+
+        public async Task<List<User>> GetActiveUsersAsync()
+            => await _db.Users
+                .Where(u => u.IsActive)
+                .AsNoTracking()
+                .ToListAsync();
+
+        public async Task<List<User>> GetUsersByCityAsync(string city)
+            => await _db.Users
+                .Where(u => u.City == city)
+                .AsNoTracking()
+                .ToListAsync();
+
     }
 }
