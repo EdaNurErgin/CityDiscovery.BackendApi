@@ -16,6 +16,9 @@ namespace IdentityService.Infrastructure.Repositories
         public Task<User?> GetActiveByEmailAsync(string email)
             => _db.Users.FirstOrDefaultAsync(u => u.Email == email && u.IsActive);
 
+        public Task<bool> UserNameExistsAsync(string userName)
+            => _db.Users.AnyAsync(u => u.UserName == userName);
+
         public Task<User?> GetByIdAsync(Guid id)
             => _db.Users.FirstOrDefaultAsync(u => u.Id == id);
 

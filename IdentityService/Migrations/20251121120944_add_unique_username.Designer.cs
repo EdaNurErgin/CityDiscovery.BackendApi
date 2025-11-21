@@ -4,6 +4,7 @@ using IdentityService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IdentityService.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    partial class IdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251121120944_add_unique_username")]
+    partial class add_unique_username
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,10 +64,7 @@ namespace IdentityService.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens", t =>
-                        {
-                            t.HasCheckConstraint("CK_RefreshTokens_ExpiresAfterCreate", "[ExpiresAt] > [CreatedAt]");
-                        });
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("IdentityService.Domain.Entities.User", b =>
@@ -114,9 +114,6 @@ namespace IdentityService.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("UserName")
                         .IsUnique();
 
                     b.ToTable("Users");

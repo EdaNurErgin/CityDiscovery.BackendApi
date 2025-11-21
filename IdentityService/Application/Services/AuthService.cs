@@ -45,6 +45,9 @@ namespace IdentityService.Application.Services
             if (await _users.EmailExistsAsync(r.Email))
                 throw new InvalidOperationException("Email already exists");
 
+            if (await _users.UserNameExistsAsync(r.UserName))
+                throw new InvalidOperationException("Username already exists");
+
             var user = new User
             {
                 UserName = r.UserName,

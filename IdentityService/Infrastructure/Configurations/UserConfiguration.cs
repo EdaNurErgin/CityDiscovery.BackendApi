@@ -10,6 +10,7 @@ namespace IdentityService.Infrastructure.Data.Configurations
         {
             builder.HasKey(x => x.Id);
             builder.HasIndex(x => x.Email).IsUnique();
+            builder.HasIndex(x => x.UserName).IsUnique();
             builder.Property(x => x.UserName).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Email).IsRequired().HasMaxLength(200);
         }

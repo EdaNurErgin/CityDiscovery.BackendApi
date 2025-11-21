@@ -16,6 +16,7 @@ namespace IdentityService.Infrastructure.Data.Configurations
 
             builder.HasIndex(x => x.Token).IsUnique();
             builder.HasIndex(x => x.UserDeviceId).IsUnique(); // cihaz başına tek token
+            builder.HasCheckConstraint("CK_RefreshTokens_ExpiresAfterCreate", "[ExpiresAt] > [CreatedAt]");
 
             // 🔻 BURASI ÖNEMLİ: User FK'sında Cascade YOK
             builder.HasOne(x => x.User)

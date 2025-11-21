@@ -7,6 +7,7 @@ namespace IdentityService.Application.Interfaces
     public interface IUserRepository
     {
         Task<bool> EmailExistsAsync(string email);
+        Task<bool> UserNameExistsAsync(string userName);
         Task AddAsync(User user);
         Task<User?> GetActiveByEmailAsync(string email);
         Task<User?> GetByIdAsync(Guid id);
