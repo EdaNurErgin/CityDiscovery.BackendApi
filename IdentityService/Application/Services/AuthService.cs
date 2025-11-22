@@ -108,6 +108,21 @@ namespace IdentityService.Application.Services
             var access = _jwt.CreateAccessToken(user);
             await _uow.SaveChangesAsync();
 
+            // 🆕 SocialService'e login bildirimi gönder
+            try
+            {
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+                await _publish.Publish(new UserLoggedInEvent(
+                    user.Id,
+                    user.UserName,
+                    user.Email,
+                    user.Role.ToString(),
+                    r.DeviceId,
+                    DateTime.UtcNow
+                ), cts.Token);
+            }
+            catch { } // Event gönderilemezse login başarısız olmasın
+
             return new AuthResultDto { AccessToken = access, RefreshToken = refresh.Token, UserId = user.Id };
         }
 
